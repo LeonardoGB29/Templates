@@ -1,0 +1,193 @@
+#include <iostream>
+using namespace std;
+
+template <typename T>
+class DynamicArray {
+private:
+    T* data;
+    int size;
+
+public:
+    DynamicArray() : size(0), data(nullptr) {}
+
+    DynamicArray(T arr[], int size) : size(size) {
+        data = new T[size];
+        for (int i=0;i<size; i++)   //copy(arr, arr + size, data);
+            data[i] = arr[i];
+    }
+
+    DynamicArray(const DynamicArray &n) : size(n.size) {
+        data = new T[n.size];
+        for (int i=0; i<n.size; i++)    //copy(n.data, n.data + n.size, data);
+            data[i] = n.data[i];
+    }
+
+    void print() const {
+        cout << "[ ";
+        for (int i = 0; i < size; i++)  //for (int item : arr) {
+            cout << data[i] << " ";     //  cout << item << " ";
+        cout << "]" << endl;
+    }
+
+    ~DynamicArray() {
+        delete[] data;
+    }
+
+    void pushBack(T val) {
+        size++;
+        T* list = new T[size];
+        list[0] = val;
+        for (int i = 0; i < size - 1; i++) {
+            list[i + 1] = data[i];
+        }
+        delete[] data;
+        data = list;
+    }
+
+    void insert(T val, int pos) {
+        size++;
+        pos--;
+        T* list = new T[size];
+        for (int i = 0; i < size - 1; i++)
+            list[i] = data[i];
+        for (int i = size - 1; i > pos; i--)
+            list[i] = data[i - 1];
+        list[pos] = val;
+        delete[] data;
+        data = list;
+    }
+
+    void remove(int pos) {
+        size--;
+        pos--;
+        T* list = new T[size];
+
+        for (int i = 0; i < size; i++) {
+            if (i >= pos)
+                list[i] = data[i + 1];
+            else
+                list[i] = data[i];
+        }
+
+        delete[] data;
+        data = list;
+    }
+};
+
+template <>
+class DynamicArray<float> {
+private:
+    float* data;
+    int size;
+
+public:
+    DynamicArray() : size(0), data(nullptr) {}
+
+    DynamicArray(float arr[], int size) : size(size) {
+        data = new float[size];
+        for (int i = 0; i < size; i++)
+            data[i] = arr[i];
+    }
+
+    DynamicArray(const DynamicArray& n) : size(n.size) {
+        data = new float[n.size];
+        for (int i = 0; i < n.size; i++)
+            data[i] = n.data[i];
+    }
+
+    void print() const {
+        cout << "[ ";
+        for (int i = 0; i < size; i++)
+            cout << data[i] << " ";
+        cout << "]" << endl;
+    }
+
+    ~DynamicArray() {
+        delete[] data;
+    }
+
+    void pushBack(float val) {
+        size++;
+        float* list = new float[size];
+        list[0] = val;
+        for (int i = 0; i < size - 1; i++) {
+            list[i + 1] = data[i];
+        }
+        delete[] data;
+        data = list;
+    }
+
+    void insert(float val, int pos) {
+        size++;
+        pos--;
+        float* list = new float[size];
+        for (int i = 0; i < size - 1; i++)
+            list[i] = data[i];
+        for (int i = size - 1; i > pos; i--)
+            list[i] = data[i - 1];
+        list[pos] = val;
+        delete[] data;
+        data = list;
+    }
+
+    void remove(int pos) {
+        size--;
+        pos--;
+        float* list = new float[size];
+
+        for (int i = 0; i < size; i++) {
+            if (i >= pos)
+                list[i] = data[i + 1];
+            else
+                list[i] = data[i];
+        }
+
+        delete[] data;
+        data = list;
+    }
+};
+
+int main() {
+    int list[5] = { 1, 2, 3, 4, 5 };
+    string list2[3] = {"red","blue","green"};
+    char list3[4] = { 'a', 'e', 'i', 'o'};
+    float list4[5] = { 1.5, 2.5, 3.5, 4.5, 5.5};
+
+    DynamicArray<int> L(list, 5);
+    L.print();
+    L.pushBack(4);
+    L.print();
+    L.insert(8,4);
+    L.print();
+    L.remove(2);
+    L.print();
+
+    DynamicArray<string> L2(list2, 3);
+    L2.print();
+    L2.pushBack("orange");
+    L2.print();
+    L2.insert("pink",3);
+    L2.print();
+    L2.remove(2);
+    L2.print();
+
+    DynamicArray<char> L3(list3, 4);
+    L3.print();
+    L3.pushBack('u');
+    L3.print();
+    L3.insert('A',3);
+    L3.print();
+    L3.remove(2);
+    L3.print();
+
+    DynamicArray<float> L4(list4,5);
+    L4.print();
+    L4.pushBack(2.4);
+    L4.print();
+    L4.insert(0.09, 3);
+    L4.print();
+    L4.remove(2);
+    L4.print();
+
+    return 0;
+}
